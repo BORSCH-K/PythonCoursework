@@ -1,116 +1,43 @@
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
-import time
-
+import timeit
 
 SAMPLE_RATE = 44100  # Гц частота дискретизации
 DURATION = 5  # Секунды
 
-# freq - частота
+
+# freq - частота, sample_rate - частота дискретизации, duration - секунды
 def generate_sine_wave(freq, sample_rate, duration):
     x = np.linspace(0, duration, sample_rate * duration, endpoint=False)
     # 2pi для преобразования в радианы
     y = np.sin((2 * np.pi) * x * freq)
     return x, y
 
-def main():
-    # timeit
-    # размер входного сигнала и время
-    # f = 16  # частота сигнала
-    # fd = 1024  # частота дискретизации
-    # ph = 0  # начальная фаза
-    # k = fd / f  # шаг
-    # A = 1  # амплитуда
-    # t = np.arange(0, k)
-    # y = A * np.sin(2 * np.pi * t / k + ph)
 
-    time_step = 0.05
-    time_vec = np.arange(0, 100, time_step)
-    # sin(2*pi*f*t)
+def generate_signal(size_y, freq):
+    # y = np.arange(0, size_y)
+    x = np.arange(0, size_y)
+    y = np.sin((2 * np.pi) * x * freq)
+    return y
 
-    result_time = []
 
-    # for f in range(50, 16000):
-    #     y = np.sin(2 * np.pi * f * time_vec)
-    #     # y.append(0)
-    #     start_time = time.monotonic()
-    #     x = np.fft.fft(y)
-    #     t = time.monotonic() - start_time
-    #     # t = timeit.timeit(stmt=np.fft.fft(y), number=1)
-    #     print(t)
-    #     result_time.append(t)
-    #
-    # print(result_time)
-
-    # nice_tone = generate_sine_wave(400, SAMPLE_RATE, DURATION)
-    # noise_tone = generate_sine_wave(4000, SAMPLE_RATE, DURATION)
-    # # noise_tone = noise_tone * 0.3
-    # mixed_tone = nice_tone + noise_tone
-
-    f = np.arange(50, 16000, 150)
-    for i in f:
-        start_time = time.monotonic()
-        np.fft.fft(generate_sine_wave(i, SAMPLE_RATE, DURATION))
-        t = time.monotonic() - start_time
-        result_time.append(t)
-        # print(time.monotonic() - start_time)
-
-    plt.plot(f, result_time)
-    plt.show()
+result_time = []
+locale_rate = 1000
+for i in range(0, 20):
     # start_time = time.monotonic()
-    # x = np.fft.fft(mixed_tone)
+    y = generate_signal(locale_rate, 160)
+    # np.fft.fft(np.arange(0, locale_rate))
+    t = timeit.timeit(stmt='np.fft.fft(y)', globals={**globals(), **locals()}, number=10000)
 
+    result_time.append(t)
+    locale_rate += 1
+    print(t)
 
+plt.plot(range(1000, locale_rate), result_time)
+plt.show()
 
-
-
-
-# Генерируем волну с частотой 2 Гц, которая длится 5 секунд
-# x, y = generate_sine_wave(2, SAMPLE_RATE, DURATION)
-
-# fig, ax = plt.subplots()
-# ax.plot(result, [1, 4, 2, 3])  # Plot some data on the axes.
-
-
-# fig, ax = plt.subplots()
-# fig1, ax1 = plt.subplots()
-# ax.plot(t / fd, y)
-# ax.grid()
-# ax.set_xlabel('t,c')
-# ax.set_ylabel('A')
-# CS = np.fft.fft(y)
-# AS = np.abs(CS)
-# FS = np.angle(CS)
-# ax1.set_xlabel('Сдвиг фазы')
-# ax1.set_ylabel('w,Гц')
-# ax1.plot(t * f, FS)
-# ax1.grid()
-# fig3, ax3 = plt.subplots()
-# ax3.stem(t * f, AS)
-# ax3.set_xlabel('Амплитуда')
-# ax3.set_ylabel('w , Гц')
-# ax3.grid()
-# z = np.fft.ifft(CS)
-# fig4, ax4 = plt.subplots()
-# ax4.plot(t / fd, z)
-# ax4.set_xlabel('t , c')
-# ax4.set_ylabel('A')
-# ax4.grid()
-# plt.show()
-
-# from packaging.version import parse as parse_version
-# data to be plotted
-# x = np.arange(1, 11)
-# y = x * x
+# def main():
 #
-# # plotting
-# plt.title("Line graph")
-# plt.xlabel("X axis")
-# plt.ylabel("Y axis")
-# plt.plot(x, y, color="red")
-# plt.show()
-
-
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
