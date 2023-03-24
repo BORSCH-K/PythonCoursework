@@ -1,3 +1,28 @@
+import numpy as np
+from scipy import fft
+import matplotlib.pyplot as plt
+
+rng = np.random.default_rng()  # одно число
+# print(rng)
+min_len = 1100  # prime length is worst case for speed
+a = rng.standard_normal(min_len)  # массив чисел
+print(a)
+b = fft.fft(a)  # ДПФ
+print(b)
+
+# c = fft.next_fast_len(min_len, real=True)
+# print(c)  # 93312
+# d = fft.fft(a, min_len)
+# print(d)
+
+t = []
+for i in range(1, 100):
+    x = fft.next_fast_len(i, real=True)
+    t.append(x)
+    print(i, x)
+
+# plt.plot(range(1, 100), t)
+# plt.show()
 # time_step = 0.05
 # time_vec = np.arange(0, 100, time_step)
 # sin(2*pi*f*t)
