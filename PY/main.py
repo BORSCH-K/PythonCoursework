@@ -1,76 +1,69 @@
+import math
 import numpy as np
 import scipy as sp
 from scipy import fft
 import matplotlib.pyplot as plt
 import timeit
 
-SAMPLE_RATE = 44100  # Гц частота дискретизации
-DURATION = 5  # Секунды
+INITIAL_FREQ = 1000  # начальная частота
+LEN_RANGE = 1000  # длина диапазона
+N = 1000  # количество повторений fft
 
 
-# freq - частота, sample_rate - частота дискретизации, duration - секунды
-def generate_sine_wave(freq, sample_rate, duration):
-    x = np.linspace(0, duration, sample_rate * duration, endpoint=False)
-    # 2pi для преобразования в радианы
-    y = np.sin((2 * np.pi) * x * freq)
-    return x, y
-
-
-def generate_signal(size_y, freq):
-    # y = np.arange(0, size_y)
-    x = np.arange(0, size_y)
-    y = np.sin((2 * np.pi) * x * freq)
-    return y
-
-
-def index(element, a):
-    print("size: ", a, element)
-    if (element-a-1000 == 0):
-        print("a - 1: ", a-1)
-        return a-1
-    else:
-        print("element-1000: ", element-1000)
-        return element-1000
-
-
-result_time = []
-locale_rate = 1000
-k = []
-for i in range(0, 125):
-    # start_time = time.monotonic()
-    # rng = np.random.default_rng()
-    # min_len = 1100
-    # y = rng.standard_normal(min_len)
-    y = generate_signal(locale_rate, 160)
-    # np.fft.fft(np.arange(0, locale_rate))
-    t = timeit.timeit(stmt='np.fft.fft(y)', globals={**globals(), **locals()}, number=10000)
-
-    x = fft.next_fast_len(locale_rate, real=True)
-    k.append(x)
-
-    result_time.append(t)
-    locale_rate += 1
+def time(i):
+    y = [0] * (i)  # массив с длиной от 1000 до 1000+LEN_RANGE-1
+    t = timeit.timeit(stmt='np.fft.fft(y)', globals={**globals(), **locals()}, number=N)
     print(i, t)
+    return t
 
-rate_point = []
-time_point = []
-rate_point.append(k[0])
-time_point.append(result_time[0])
-print(rate_point, time_point, k[0] - 1000)
-j = 0
-for i in range(0, locale_rate - 1000):  # 125
-    if k[i] != rate_point[j]:
-        j += 1
-        rate_point.append(k[i])
-        time_point.append(result_time[index(k[i], len(result_time))])
-    print(i, rate_point, time_point, index(k[i], len(result_time)))
 
-print(k)
-plt.plot(range(1000, locale_rate), result_time)
-plt.plot(rate_point, time_point, 'o')
+def nfl(i):
+    x = fft.next_fast_len(i, real=True)  # нахождение благоприятной точки
+    return x
+
+
+def M_(x):  # среднее значение
+    # x - массив чисел
+    return sum(x) / len(x)
+
+
+def D_(x, M):  # среднеквадратичное значение
+    # x - массив чисел
+    # M - среднее значение
+    for i in range(0, len(x)):
+        sum_ = (x[i] - M) ** 2
+    return math.sqrt(sum_ / (len(x) - 1))
+
+
+time_fft = []  # время на ДПФ
+locale_rate = 1000  # начальная частота, изменяемая
+k_points = []  # список точкей с наилучшей частотой
+
+for range_element in range(INITIAL_FREQ, LEN_RANGE+INITIAL_FREQ):  # range_element - элемент диапазона
+    time_fft.append(time(range_element))
+
+k = INITIAL_FREQ  # текущая частота
+while k < (LEN_RANGE + INITIAL_FREQ):
+    k_temp = nfl(k)
+    k_points.append(k_temp)
+    k = k_temp + 1
+print(k_points)
+
+X = []  # время для k-ой частоты * 10
+M = []  # среднее значение х
+D = []  # среднеквадратичное отклонение
+for i in range(0, len(k_points)):
+    x = []
+    print(k_points[i])
+    for j in range(0, 10):
+        x.append(time(k_points[i]))
+    X.append(x)
+    M.append(M_(x))
+    D.append((D_(x, M[i])))
+
+    print(i, M[i], D[i])
+    print(x)
+
+plt.plot(range(INITIAL_FREQ, INITIAL_FREQ + LEN_RANGE), time_fft)
+plt.plot(k_points, M, 'o')
 plt.show()
-
-# def main():
-#
-# if __name__ == '__main__':
-#     main()

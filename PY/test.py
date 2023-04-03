@@ -1,111 +1,115 @@
-import numpy as np
-from scipy import fft
-import matplotlib.pyplot as plt
 
-rng = np.random.default_rng()  # одно число
-# print(rng)
-min_len = 1100  # prime length is worst case for speed
-a = rng.standard_normal(min_len)  # массив чисел
-print(a)
-b = fft.fft(a)  # ДПФ
-print(b)
-
-# c = fft.next_fast_len(min_len, real=True)
-# print(c)  # 93312
-# d = fft.fft(a, min_len)
-# print(d)
-
-t = []
-for i in range(1, 100):
-    x = fft.next_fast_len(i, real=True)
-    t.append(x)
-    print(i, x)
-
-# plt.plot(range(1, 100), t)
-# plt.show()
-# time_step = 0.05
-# time_vec = np.arange(0, 100, time_step)
-# sin(2*pi*f*t)
-
-
-# mixed_tone = nice_tone + noise_tone
-
-# f = np.arange(50, 16000, 150)  # частоты
-# f = 150
-
-# plt.plot(f, result_time)
-# plt.show()
-
-# timeit
-# размер входного сигнала и время
-# f = 16  # частота сигнала
-# fd = 1024  # частота дискретизации
-# ph = 0  # начальная фаза
-# k = fd / f  # шаг
-# A = 1  # амплитуда
-# t = np.arange(0, k)
-# y = A * np.sin(2 * np.pi * t / k + ph)
-
-# start_time = time.monotonic()
-# x = np.fft.fft(mixed_tone)
-# for f in range(50, 16000):
-#     y = np.sin(2 * np.pi * f * time_vec)
-#     # y.append(0)
-#     start_time = time.monotonic()
-#     x = np.fft.fft(y)
-#     t = time.monotonic() - start_time
-#     # t = timeit.timeit(stmt=np.fft.fft(y), number=1)
-#     print(t)
+# import numpy as np
+# import scipy as sp
+# from scipy import fft
+# import matplotlib.pyplot as plt
+# import timeit
+#
+# SAMPLE_RATE = 44100  # Гц частота дискретизации
+# DURATION = 5  # Секунды
+#
+#
+# # freq - частота, sample_rate - частота дискретизации, duration - секунды
+# def generate_sine_wave(freq, sample_rate, duration):
+#     x = np.linspace(0, duration, sample_rate * duration, endpoint=False)
+#     # 2pi для преобразования в радианы
+#     y = np.sin((2 * np.pi) * x * freq)
+#     return x, y
+#
+#
+# def generate_signal(size_y, freq):
+#     # y = np.arange(0, size_y)
+#     x = np.arange(0, size_y)
+#     y = np.sin((2 * np.pi) * x * freq)
+#     return y
+#
+#
+# def index(element, a):
+#     # print("size: ", a, element)
+#     if (element-a-1000 == 0):
+#         # print("a - 1: ", a-1)
+#         return a-1
+#     else:
+#         # print("element-1000: ", element-1000)
+#         return element-1000
+#
+#
+# result_time = []
+# locale_rate = 1000
+# k = []
+# for i in range(0, 125):
+#     # start_time = time.monotonic()
+#     # rng = np.random.default_rng()
+#     # min_len = 1100
+#     # y = rng.standard_normal(min_len)
+#     y = generate_signal(locale_rate, 160)
+#     # np.fft.fft(np.arange(0, locale_rate))
+#     t = timeit.timeit(stmt='np.fft.fft(y)', globals={**globals(), **locals()}, number=10)
+#
+#     x = fft.next_fast_len(locale_rate, real=True)
+#     k.append(x)
+#
 #     result_time.append(t)
+#     locale_rate += 1
+#     # print(i, t)
 #
-# print(result_time)
-
-# nice_tone = generate_sine_wave(400, SAMPLE_RATE, DURATION)
-# noise_tone = generate_sine_wave(4000, SAMPLE_RATE, DURATION)
-# # noise_tone = noise_tone * 0.3
-
-
-# Генерируем волну с частотой 2 Гц, которая длится 5 секунд
-# x, y = generate_sine_wave(2, SAMPLE_RATE, DURATION)
-
-# fig, ax = plt.subplots()
-# ax.plot(result, [1, 4, 2, 3])  # Plot some data on the axes.
-
-
-# fig, ax = plt.subplots()
-# fig1, ax1 = plt.subplots()
-# ax.plot(t / fd, y)
-# ax.grid()
-# ax.set_xlabel('t,c')
-# ax.set_ylabel('A')
-# CS = np.fft.fft(y)
-# AS = np.abs(CS)
-# FS = np.angle(CS)
-# ax1.set_xlabel('Сдвиг фазы')
-# ax1.set_ylabel('w,Гц')
-# ax1.plot(t * f, FS)
-# ax1.grid()
-# fig3, ax3 = plt.subplots()
-# ax3.stem(t * f, AS)
-# ax3.set_xlabel('Амплитуда')
-# ax3.set_ylabel('w , Гц')
-# ax3.grid()
-# z = np.fft.ifft(CS)
-# fig4, ax4 = plt.subplots()
-# ax4.plot(t / fd, z)
-# ax4.set_xlabel('t , c')
-# ax4.set_ylabel('A')
-# ax4.grid()
+# rate_point = []
+# time_point = []
+# rate_point.append(k[0])
+# time_point.append(result_time[0])
+# print(rate_point, time_point, k[0] - 1000)
+# j = 0
+# for i in range(0, locale_rate - 1000):  # 125
+#     if k[i] != rate_point[j]:
+#         j += 1
+#         rate_point.append(k[i])
+#         time_point.append(result_time[index(k[i], len(result_time))])
+#     print(i, rate_point, time_point, index(k[i], len(result_time)))
+#
+# print(k)
+# plt.plot(range(1000, locale_rate), result_time)
+# plt.plot(rate_point, time_point, 'o')
 # plt.show()
 
-# from packaging.version import parse as parse_version
-# data to be plotted
-# x = np.arange(1, 11)
-# y = x * x
+# def main():
 #
-# # plotting
-# plt.title("Line graph")
-# plt.xlabel("X axis")
-# plt.ylabel("Y axis")
-# plt.plot(x, y, color="red")
-# plt.show()
+# if __name__ == '__main__':
+#     main()
+
+# for i in range(0, 3):
+#     print(i)
+
+# def generate_sine_wave(freq, sample_rate, duration):
+#     x = np.linspace(0, duration, sample_rate * duration, endpoint=False)
+#     # 2pi для преобразования в радианы
+#     y = np.sin((2 * np.pi) * x * freq)
+#     return x, y
+#
+#
+# def generate_signal(size_y, freq):
+#     # y = np.arange(0, size_y)
+#     x = np.arange(0, size_y)
+#     y = np.sin((2 * np.pi) * x * freq)
+#     return y
+# import numpy as np
+# from scipy import fft
+# import matplotlib.pyplot as plt
+#
+# rng = np.random.default_rng()  # одно число
+# # print(rng)
+# min_len = 1100  # prime length is worst case for speed
+# a = rng.standard_normal(min_len)  # массив чисел
+# print(a)
+# b = fft.fft(a)  # ДПФ
+# print(b)
+#
+# # c = fft.next_fast_len(min_len, real=True)
+# # print(c)  # 93312
+# # d = fft.fft(a, min_len)
+# # print(d)
+#
+# t = []
+# for i in range(1, 100):
+#     x = fft.next_fast_len(i, real=True)
+#     t.append(x)
+#     print(i, x)
