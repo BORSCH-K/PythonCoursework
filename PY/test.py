@@ -1,11 +1,9 @@
-import numpy as np
+f = open('test.txt', 'r')
 
-a = np.arange(6)
-
-a2 = a[np.newaxis, :]
-
-print(a2.shape)
-
+temp_freq, t = map(float, f.readline().split())
+print(temp_freq, t)
+f.close()
+# print(freq[i], time[i])
 # import numpy as np
 # import scipy as sp
 # from scipy import fft
