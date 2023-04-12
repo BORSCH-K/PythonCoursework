@@ -1,8 +1,34 @@
-f = open('test.txt', 'r')
+import math
 
-temp_freq, t = map(float, f.readline().split())
-print(temp_freq, t)
-f.close()
+
+def M_(x):  # среднее значение
+    # x - массив чисел
+    return sum(x) / len(x)
+
+
+def D_(x, M):  # среднеквадратичное значение
+    # x - массив чисел
+    # M - среднее значение
+    for i in range(0, len(x)):
+        sum_ = (x[i] - M) ** 2
+    return math.sqrt(sum_ / (len(x) - 1))
+
+
+f = open('test.txt', 'r')
+time = [0] * 20
+for i in range(0, 20):
+    freq, time[i] = map(float, f.readline().split())
+print(time)
+
+
+M = (M_(time))
+D = ((D_(time, M)))
+print(M, D, (D / M * 100))
+# f = open('test.txt', 'r')
+#
+# temp_freq, t = map(float, f.readline().split())
+# print(temp_freq, t)
+# f.close()
 # print(freq[i], time[i])
 # import numpy as np
 # import scipy as sp
