@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 freq = [0] * 201
 time = [0.] * 201
 
-f = open('data-330.txt', 'r')
+f = open('data-506.txt', 'r')
 lines = f.readlines()
 i = 0
 for j in range(10, 2211, 11):  # запись данных
@@ -22,7 +22,7 @@ for j in range(10, 2211, 11):  # запись данных
 # time[34] = 1.2441199561500005
 
 # для 506:
-# time[49] = 1.2861662750000002
+time[49] = 1.2861662750000002
 
 f.close()
 
@@ -71,7 +71,7 @@ print("Количество NFL-точек: ", len(k))
 print("Общее время выполнения: ", sum(time))
 print("Среднее время выполнения операции: ", sum(time) / 201)
 
-# plt.plot(freq, time)
-# plt.plot(k, fast_t, 'o')
-# plt.plot(speed_f, speed_t, 'o')
-# plt.show()
+plt.plot(freq, time)
+plt.plot(k, fast_t, 'o')
+plt.plot(speed_f, speed_t, 'o')
+plt.show()

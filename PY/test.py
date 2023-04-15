@@ -1,29 +1,50 @@
-import math
+import matplotlib.pyplot as plt
 
+freq = [0] * 201
+time = [0.] * 201
 
-def M_(x):  # среднее значение
-    # x - массив чисел
-    return sum(x) / len(x)
+f = open('3.txt', 'r')
+lines = f.readlines()
+i = 0
+for j in range(0, 201):  # запись данных
+    #     # print(f.readline())
+    l, time[i] = map(float, lines[j].split())
+    # print(l)
+    freq[i] = int(l)
+    # print(freq[i], time[i])
+    i += 1
+f.close()
 
+# k= 0
+# for i in range(0, 201):
+#     if time[i] <= 1.44:
+#         print(freq[i], time[i])
+#         k += 1
+# print(k)
+n = 37
 
-def D_(x, M):  # среднеквадратичное значение
-    # x - массив чисел
-    # M - среднее значение
-    for i in range(0, len(x)):
-        sum_ = (x[i] - M) ** 2
-    return math.sqrt(sum_ / (len(x) - 1))
+p_f = []
+p_t = []
 
+k = [1000, 1024, 1080, 1125, 1152, 1200]
+k_t = [0.] * len(k)
+for i in range(0, len(k)):
+    k_t[i] = time[k[i] - 1000]
 
-f = open('test.txt', 'r')
-time = [0] * 20
-for i in range(0, 20):
-    freq, time[i] = map(float, f.readline().split())
-print(time)
+u = open('points_3.txt', 'r')
+lines_u = u.readlines()
+for i in range(0, n):
+    a = lines_u[i].split()
+    # print(int(a[0]))
+    if (int(a[0]) in k) == 0:
+        p_f.append(int(a[0]))
+        p_t.append(time[int(a[0]) - 1000])
+u.close()
+plt.plot(freq, time)
+plt.plot(k, k_t, 'o')
+plt.plot(p_f, p_t, 'o')
+plt.show()
 
-
-M = (M_(time))
-D = ((D_(time, M)))
-print(M, D, (D / M * 100))
 # f = open('test.txt', 'r')
 #
 # temp_freq, t = map(float, f.readline().split())
